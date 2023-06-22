@@ -10,6 +10,7 @@ export type Unit = "C" | "F";
 interface Options {
   deviceId: string;
   units: Unit;
+  precision?: number;
 }
 
 export default class DS18B20 {
@@ -69,7 +70,10 @@ export default class DS18B20 {
         const data = await readFile(path);
         const output = data.toString();
 
-        const value = parse(output, this.options.units);
+        let value = parse(output, this.options.units);
+
+        if (value && this.options.precision)
+          value = Number(value.toFixed(this.options.precision));
 
         if (value !== null && value !== this.lastValue) {
           this.emitter.emit("change", value);
