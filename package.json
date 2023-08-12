@@ -1,14 +1,17 @@
 {
+  "author": "smnplicity",
   "name": "@node-rpi-gpio/ds18b20",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",  
+  "repository": {
+    "url": "https://github.com/smnplicity/node-rpi-gpio-ds18b20"
+  },
+  "description": "Reads data from a DS18B20",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npx tsc",
     "test": "mocha --require ts-node/register tests/*.ts"
   },
-  "author": "",
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.3.5",
