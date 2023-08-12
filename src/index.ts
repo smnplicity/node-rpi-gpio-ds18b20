@@ -13,16 +13,15 @@ interface Options {
   precision?: number;
 }
 
-export default class DS18B20 {
+export default class DS18B20 extends EventEmitter {
   private BASE_PATH = "/sys/bus/w1/devices";
-
-  private emitter = new EventEmitter();
 
   private options: Options;
 
   private lastValue: number | null = null;
 
   constructor(opts: Options) {
+    super();
     this.options = opts;
   }
 
@@ -33,24 +32,27 @@ export default class DS18B20 {
       "w1_slave"
     );
 
-    this.emitter.emit(
-      "debug",
-      `${fullPath} exists: ${fs.existsSync(fullPath)}`
-    );
+    this.emit("debug", `${fullPath} exists: ${fs.existsSync(fullPath)}`);
 
-    if (fs.existsSync(fullPath)) {
-      const poll = async () => {
+    const poll = async () => {
+      if (fs.existsSync(fullPath)) {
         const success = await this.parseDataAsync(fullPath);
 
         const wait = success ? 1000 : 3000;
 
         setTimeout(poll, wait);
-      };
+      } else {
+        this.emit(
+          "error",
+          new Error(
+            `Device '${this.options.deviceId}' not found in '${fullPath}'. Retrying in 30 seconds.`
+          )
+        );
+        setTimeout(poll, 30000);
+      }
+    };
 
-      poll();
-    } else {
-      this.emitter.emit("error", new Error("Device Id not found."));
-    }
+    poll();
 
     return this;
   };
@@ -59,7 +61,7 @@ export default class DS18B20 {
     channel: "change" | "error" | "debug",
     listener: (...args: any[]) => void
   ) => {
-    this.emitter.on(channel, listener);
+    this.on(channel, listener);
 
     return this;
   };
@@ -76,14 +78,14 @@ export default class DS18B20 {
           value = Number(value.toFixed(this.options.precision));
 
         if (value !== null && value !== this.lastValue) {
-          this.emitter.emit("change", value);
+          this.emit("change", value);
           this.lastValue = value;
         }
 
         return value !== null;
       }
     } catch (e) {
-      this.emitter.emit("error", e);
+      this.emit("error", e);
     }
 
     return false;
