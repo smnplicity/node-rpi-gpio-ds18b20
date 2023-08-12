@@ -1,9 +1,9 @@
-# node-rpi-gpio-ds18b20
+# @node-rpi-gpio/ds18b20
 A simple event based NodeJS module for reading temperature using a DS18B20 on a Raspberry PI.
 
 ## Installation
 ```
-npm i @smnplicity/node-rpi-gpio-ds18b20
+npm i @node-rpi-gpio/ds18b20
 ```
 
 ## Usage
