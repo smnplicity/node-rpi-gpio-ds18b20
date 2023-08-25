@@ -61,7 +61,7 @@ export default class DS18B20 extends EventEmitter {
     channel: "change" | "error" | "debug",
     listener: (...args: any[]) => void
   ) => {
-    this.on(channel, listener);
+    super.on(channel, listener);
 
     return this;
   };
