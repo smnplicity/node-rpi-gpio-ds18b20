@@ -6,6 +6,13 @@
     "url": "https://github.com/smnplicity/node-rpi-gpio-ds18b20"
   },
   "description": "Reads data from a DS18B20",
+  "keywords": [
+    "rpi",
+    "rpi ina226",
+    "raspberry pi ds18b20",
+    "rpi gpio",
+    "raspberry pi gpio"
+  ],
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
